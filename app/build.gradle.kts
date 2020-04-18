@@ -61,6 +61,8 @@ dependencies {
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
 
+    implementation("androidx.biometric:biometric:1.0.1")
+
 //    // Required for local unit tests (JUnit 4 framework)
 //    testImplementation("org.junit.jupiter:junit-jupiter-engine:5.5.2")
 //    testImplementation("org.junit.platform:junit-platform-runner:1.5.2")

@@ -1,6 +1,11 @@
 <resources>
-    <string name="app_name">Diary</string>
+    <string name="app_name">Your Diary</string>
     <string name="back_button">Back button</string>
+
+<!--    LoginFragment.kt-->
+    <string name="your_diary_is_locked">Your Diary is locked</string>
+    <string name="biometrics_title">Biometric login for Your Diary</string>
+    <string name="biometrics_subtitle">Log in using biometrics</string>
 
 <!--    OverviewFragment.kt-->
     <string name="your_diary">Your Diary</string>
@@ -11,4 +16,6 @@
     <string name="emotion">😐</string>
     <string name="content">Content</string>
     <string name="your_thoughts">Your thoughts…</string>
+    <string name="created_placeholder">Created: %s</string>
+    <string name="modified_placeholder">Modified: %s</string>
 </resources>

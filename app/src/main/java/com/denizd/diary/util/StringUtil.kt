@@ -2,14 +2,11 @@ package com.denizd.diary.util
 
 import android.graphics.Typeface
 import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.TypefaceSpan
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 private val sdfDate = SimpleDateFormat("yyyy-MM-dd", Locale.ROOT)
 private val sdfDateTime = SimpleDateFormat("yyyy-MM-dd, HH:mm", Locale.ROOT)
@@ -46,6 +43,5 @@ fun String.asFormattedSpan(): SpannableString {
             previousChar = char
         }
     }
-
     return span
 }

@@ -31,8 +31,11 @@ class OverviewFragment : BaseFragment(R.layout.fragment_overview), EntryAdapter.
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            fab.setOnClickListener {
+            addButton.setOnClickListener {
                 openEntry(viewModel.insert(Entry.empty))
+            }
+            settingsButton.setOnClickListener {
+                openFragment(SettingsFragment())
             }
             recyclerView.apply {
                 adapter = entryAdapter
