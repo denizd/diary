@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="textOnPrimary" format="color"/>
+    <attr name="colorHint" format="color"/>
+    <attr name="colorBackground" format="color"/>
+
+    <bool name="isTablet">false</bool>
+    <dimen name="cornerRadius">24dp</dimen>
+</resources>
