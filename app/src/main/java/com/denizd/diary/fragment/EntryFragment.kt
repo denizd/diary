@@ -31,9 +31,22 @@ class EntryFragment : BaseFragment(R.layout.fragment_entry) {
             titleField.setText(currentEntry.title)
             emotionField.setText(currentEntry.emotion)
             contentField.setText(currentEntry.content)
+            val keyListener = contentField.keyListener
+            contentField.keyListener = null
             lastEdited.text = currentEntry.time.asDate(time = true)
             backButton.setOnClickListener {
                 activity?.onBackPressed()
+            }
+            editButton.setOnClickListener {
+                contentField.isEditable = !contentField.isEditable
+                editButton.setImageDrawable(context.getDrawable(if (contentField.isEditable) {
+                    contentField.keyListener = keyListener
+                    R.drawable.check
+                } else {
+                    contentField.keyListener = null
+                    R.drawable.edit
+                }))
+                contentField.refreshText()
             }
         }
     }

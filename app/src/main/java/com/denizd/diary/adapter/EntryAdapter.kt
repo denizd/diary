@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.denizd.diary.databinding.ItemEntryBinding
 import com.denizd.diary.model.Entry
 import com.denizd.diary.util.asDate
+import com.denizd.diary.util.asFormattedSpan
 
 class EntryAdapter(private var entries: List<Entry>, private val listener: EntryClickListener) : RecyclerView.Adapter<EntryAdapter.EntryViewHolder>() {
 
@@ -39,7 +40,7 @@ class EntryAdapter(private var entries: List<Entry>, private val listener: Entry
             holder.entry = currentItem
             holder.binding.apply {
                 title.text = currentItem.title
-                contentPreview.text = currentItem.content
+                contentPreview.text = currentItem.content.asFormattedSpan()
                 time.text = currentItem.time.asDate(time = true)
                 emotion.text = currentItem.emotion
             }
