@@ -10,7 +10,7 @@ import com.denizd.diary.model.Entry
 @Dao
 interface AppDao {
 
-    @get:Query("SELECT * FROM entry ORDER BY time DESC")
+    @get:Query("SELECT * FROM entry ORDER BY time_created DESC")
     val allEntries: LiveData<List<Entry>>
 
     @Insert
@@ -21,4 +21,5 @@ interface AppDao {
 
     @Update
     fun updateEntry(entry: Entry)
+
 }

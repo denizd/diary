@@ -41,7 +41,7 @@ class EntryAdapter(private var entries: List<Entry>, private val listener: Entry
             holder.binding.apply {
                 title.text = currentItem.title
                 contentPreview.text = currentItem.content.asFormattedSpan()
-                time.text = currentItem.time.asDate(time = true)
+                time.text = currentItem.timeCreated.asDate(time = true)
                 emotion.text = currentItem.emotion
             }
         }
