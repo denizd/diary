@@ -14,4 +14,19 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun stringIndex() {
+        assertEquals(1, "abcdef".indexOf("bcde"))
+    }
+
+    @Test
+    fun regexTest() {
+        val s = "{title=\"\"#content=\"\"#emotion=\"\"#timeCreated=0#timeLastModified=0#id=0EOO}{title=\"\"#content=\"\"#emotion=\"\"#timeCreated=0#timeLastModified=0#id=0EOO}"
+        val l = listOf(
+            "{title=\"\"#content=\"\"#emotion=\"\"#timeCreated=0#timeLastModified=0#id=0EOO}",
+            "{title=\"\"#content=\"\"#emotion=\"\"#timeCreated=0#timeLastModified=0#id=0EOO}"
+        )
+        assertEquals(l, s.split(Regex("(?=(\\{title=))")).filter { it != "" })
+    }
 }

@@ -70,9 +70,9 @@ dependencies {
 //    // Required for instrumented tests
 //    androidTestImplementation("com.android.support:support-annotations:28.0.0")
 //    androidTestImplementation("com.android.support.test:runner:1.0.2")
-//
-//    testImplementation("junit:junit:4.12")
-//    androidTestImplementation("androidx.test.ext:junit:1.1.1")
-//    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+
+    testImplementation("junit:junit:4.12")
+    androidTestImplementation("androidx.test.ext:junit:1.1.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 
 }

@@ -18,4 +18,8 @@
     <string name="your_thoughts">Your thoughts…</string>
     <string name="created_placeholder">Created: %s</string>
     <string name="modified_placeholder">Modified: %s</string>
+
+<!--    SettingsFragment.kt-->
+    <string name="sync">Sync</string>
+    <string name="open_sync_menu">Open sync menu</string>
 </resources>
