@@ -1,20 +1,25 @@
 package com.denizd.diary.fragment
 
 import android.animation.Animator
+import android.app.Activity
+import android.inputmethodservice.InputMethodService
 import android.os.Bundle
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.animation.Animation
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.denizd.diary.R
 import com.denizd.diary.databinding.FragmentEntryBinding
 import com.denizd.diary.model.Entry
 import com.denizd.diary.util.asDate
 import com.denizd.diary.util.viewBinding
+import com.denizd.diary.view.EmojiAdapter
 import com.denizd.diary.viewmodel.EntryViewModel
 import kotlin.math.hypot
 
-class EntryFragment : BaseFragment(R.layout.fragment_entry) {
+class EntryFragment : BaseFragment(R.layout.fragment_entry), EmojiAdapter.EmojiClickListener {
 
     private val binding by viewBinding(FragmentEntryBinding::bind)
     private val viewModel by viewModels<EntryViewModel>()
@@ -26,8 +31,7 @@ class EntryFragment : BaseFragment(R.layout.fragment_entry) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val id = arguments?.getLong("id")
-        currentEntry = viewModel.getEntry(id ?: throw IllegalArgumentException("Entry with id $id not found"))
+        currentEntry = viewModel.getEntry(arguments?.getLong("id"))
         originalTitle = currentEntry.title
         originalText = currentEntry.content
         originalEmotion = currentEntry.emotion
@@ -38,34 +42,74 @@ class EntryFragment : BaseFragment(R.layout.fragment_entry) {
 
         binding.apply {
             titleField.setText(currentEntry.title)
-            emotionField.setText(currentEntry.emotion)
+            emojiText.text = currentEntry.emotion
+            emojiKeyboard.initialise(this@EntryFragment)
             contentField.setText(currentEntry.content)
             val keyListener = contentField.keyListener
             contentField.keyListener = null
+            emojiButton.isEnabled = false
             created.text = getCreatedString()
             lastModified.text = getLastModifiedString()
             backButton.setOnClickListener {
                 activity?.onBackPressed()
             }
             editButton.setOnClickListener {
+                hideEmojiKeyboard()
                 contentField.isEditable = !contentField.isEditable
                 reveal(contentField.isEditable)
                 editButton.setImageDrawable(context.getDrawable(if (contentField.isEditable) {
                     contentField.keyListener = keyListener
+                    emojiButton.isEnabled = true
                     R.drawable.check
                 } else {
                     save()
                     contentField.keyListener = null
+                    emojiButton.isEnabled = false
                     R.drawable.edit
                 }))
                 contentField.refreshText()
+            }
+            titleField.setOnClickListener {
+                hideEmojiKeyboard()
+            }
+            emojiButton.setOnClickListener {
+                emojiKeyboard.visibility = if (emojiKeyboard.visibility == View.VISIBLE) {
+                    View.GONE
+                } else {
+                    (context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager)
+                        .hideSoftInputFromWindow(view.windowToken, 0)
+                    View.VISIBLE
+                }
+            }
+            contentField.setOnClickListener {
+                hideEmojiKeyboard()
             }
         }
     }
 
     override fun onPause() {
-        super.onPause()
+        hideEmojiKeyboard()
         save()
+        super.onPause()
+    }
+
+    private fun save() {
+        if (hasBeenEdited()) with(binding) {
+            viewModel.save(
+                currentEntry,
+                titleField.text.toString(),
+                emojiText.text.toString(),
+                contentField.text.toString()
+            )
+        }
+    }
+
+    fun hideEmojiKeyboard(): Boolean {
+        with (binding.emojiKeyboard) {
+            if (visibility == View.GONE) return false
+            visibility = View.GONE
+            return true
+        }
     }
 
     private fun reveal(isInEditMode: Boolean) {
@@ -93,28 +137,15 @@ class EntryFragment : BaseFragment(R.layout.fragment_entry) {
         }
     }
 
-    private fun save() {
-        if (hasBeenEdited()) {
-            viewModel.updateEntry(with(binding) {
-                currentEntry.copy(
-                        title = titleField.text.toString(),
-                        emotion = emotionField.text.toString(),
-                        content = contentField.text.toString(),
-                        timeLastModified = currentEntry.timeLastModified
-                )
-            })
-        }
-    }
-
     private fun hasBeenEdited(): Boolean {
         return if (originalTitle == binding.titleField.text.toString()
                 && originalText == binding.contentField.text.toString()
-                && originalEmotion == binding.emotionField.text.toString()) {
+                && originalEmotion == binding.emojiText.text.toString()) {
             false
         } else {
             originalTitle = binding.titleField.text.toString()
             originalText = binding.contentField.text.toString()
-            originalEmotion = binding.emotionField.text.toString()
+            originalEmotion = binding.emojiText.text.toString()
             currentEntry = currentEntry.copy(timeLastModified = System.currentTimeMillis())
             binding.lastModified.text = getLastModifiedString()
             true
@@ -125,4 +156,8 @@ class EntryFragment : BaseFragment(R.layout.fragment_entry) {
             getString(R.string.created_placeholder, currentEntry.timeCreated.asDate(time = true))
     private fun getLastModifiedString(): String =
             getString(R.string.modified_placeholder, currentEntry.timeLastModified.asDate(time = true))
+
+    override fun onEmojiClick(emoji: String) {
+        binding.emojiText.text = emoji
+    }
 }

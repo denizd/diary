@@ -2,6 +2,7 @@ package com.denizd.diary.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentTransaction
@@ -11,12 +12,13 @@ import com.denizd.diary.data.AppRepository
 import com.denizd.diary.databinding.ActivityMainBinding
 import com.denizd.diary.fragment.*
 import com.denizd.diary.util.viewBinding
-import kotlin.IllegalArgumentException
+import com.denizd.diary.viewmodel.MainViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private val binding by viewBinding(ActivityMainBinding::inflate)
     private var isAuthenticated = false
+    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +36,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        val currentFragment = supportFragmentManager.fragments[0]
+        if (currentFragment is EntryFragment) {
+            if (!currentFragment.hideEmojiKeyboard()) super.onBackPressed()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     private fun loadFragment(name: String): Boolean {
-        val fragment = supportFragmentManager.findFragmentByTag(name) as? BaseFragment ?: getNewFragment(name)
+        val fragment = supportFragmentManager.findFragmentByTag(name) as? BaseFragment ?: viewModel.getNewFragment(name)
 
         if (fragment.lifecycle.currentState != Lifecycle.State.INITIALIZED) return false
 
@@ -44,14 +55,6 @@ class MainActivity : AppCompatActivity() {
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             .commit()
         return true
-    }
-
-    private fun getNewFragment(name: String): BaseFragment = when (name) {
-        "LoginFragment" -> LoginFragment()
-        "OverviewFragment" -> OverviewFragment()
-        "EntryFragment" -> EntryFragment()
-        "SettingsFragment" -> SettingsFragment()
-        else -> throw IllegalArgumentException("Fragment $name not found")
     }
 
     fun promptForLogin() {
@@ -67,6 +70,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle(getString(R.string.biometrics_title))
             .setSubtitle(getString(R.string.biometrics_subtitle))
             .setDeviceCredentialAllowed(true)
-            .build())
+            .build()
+        )
     }
 }

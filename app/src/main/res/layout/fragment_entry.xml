@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="@drawable/rounded_corner_layer">
+    android:background="@drawable/rounded_corner_layer"
+    android:animateLayoutChanges="true">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -67,15 +68,42 @@
             android:inputType="textCapSentences"
             android:layout_marginEnd="4dp"/>
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/emotion_field"
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/emotion_field"-->
+<!--            android:layout_width="64dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:textSize="32sp"-->
+<!--            android:hint="@string/emotion"-->
+<!--            android:textColor="?attr/colorOnBackground"-->
+<!--            android:background="@null"-->
+<!--            android:maxLength="8"/>-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="64dp"
-            android:layout_height="wrap_content"
-            android:textSize="32sp"
-            android:hint="@string/emotion"
-            android:textColor="?attr/colorOnBackground"
-            android:background="@null"
-            android:maxLength="8"/>
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/emoji_text"
+                android:layout_width="64dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:textSize="32sp"
+                android:gravity="center"/>
+
+            <ImageButton
+                android:id="@+id/emoji_button"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="?selectableItemBackgroundBorderless"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </LinearLayout>
 
@@ -127,5 +155,14 @@
             android:fontFamily="@font/manrope_medium"/>
 
     </LinearLayout>
+
+    <com.denizd.diary.view.EmojiKeyboard
+        android:id="@+id/emoji_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        android:visibility="gone"
+        android:background="?attr/colorHint"
+        android:padding="8dp"
+        android:clipToPadding="false"/>
 
 </LinearLayout>
