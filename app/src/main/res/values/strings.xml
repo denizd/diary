@@ -22,4 +22,13 @@
 <!--    SettingsFragment.kt-->
     <string name="sync">Sync</string>
     <string name="open_sync_menu">Open sync menu</string>
+    <string name="sync_desc">This menu allows you to synchronize your app data with a local Diary sync server.</string>
+    <string name="host_address">Host address</string>
+    <string name="host_empty">Host must not be empty; check server window</string>
+    <string name="sync_connect">Connecting to server…</string>
+    <string name="sync_up_started">Uploading entries to server…</string>
+    <string name="sync_down_started">Downloading entries from server…</string>
+    <string name="sync_up_success">Data successfully uploaded!</string>
+    <string name="sync_down_success">Data successfully downloaded!</string>
+    <string name="sync_error">Something went wrong.</string>
 </resources>

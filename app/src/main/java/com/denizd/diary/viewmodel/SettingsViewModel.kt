@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 
 class SettingsViewModel : BaseViewModel() {
 
-    private fun sync(update: SyncUpdate, operation: () -> Boolean) = viewModelScope.launch {
+    private inline fun sync(update: SyncUpdate, crossinline operation: () -> Boolean) = viewModelScope.launch {
         withContext(Dispatchers.Main) {
             update.onSyncStarted()
         }
@@ -19,15 +19,15 @@ class SettingsViewModel : BaseViewModel() {
         }
     }
 
-    fun syncDown(update: SyncUpdate) {
+    fun syncDown(host: String, update: SyncUpdate) {
         sync(update) {
-            repo.syncDown()
+            repo.syncDown(host)
         }
     }
 
-    fun syncUp(update: SyncUpdate) {
+    fun syncUp(host: String, update: SyncUpdate) {
         sync(update) {
-            repo.syncUp()
+            repo.syncUp(host)
         }
     }
 

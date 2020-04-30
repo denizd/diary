@@ -51,4 +51,8 @@
         <item name="cardElevation">0dp</item>
     </style>
 
+    <style name="AppTheme.AlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="dialogCornerRadius">?attr/cornerRadius</item>
+    </style>
+
 </resources>

@@ -6,6 +6,7 @@ import com.denizd.diary.model.Entry
 import java.io.BufferedReader
 import java.io.BufferedWriter
 import java.io.IOException
+import java.net.InetSocketAddress
 import java.net.Socket
 import java.net.UnknownHostException
 
@@ -26,30 +27,33 @@ class AppRepository private constructor(appContext: Context) {
      *
      * @return success status
      */
-    fun syncDown(): Boolean {
+    fun syncDown(host: String): Boolean {
         return try {
-            BufferedReader(Socket("192.168.2.109", 23754).getInputStream().reader()).use { reader ->
+            BufferedReader(host.connect().getInputStream().reader()).use { reader ->
                 db.clearEntries()
                 db.insertAll(reader.getEntriesFromNetwork())
             }
             true
         } catch (e: Exception) {
-            Log.e("TAG", e.message ?: "errrrrrrrrror")
+            Log.e("e", "e", e)
             false
         }
     }
 
-    fun syncUp(): Boolean {
+    fun syncUp(host: String): Boolean {
         return try {
-            BufferedWriter(Socket("192.168.2.109", 23754).getOutputStream().writer()).use { writer ->
+            BufferedWriter(host.connect().getOutputStream().writer()).use { writer ->
                 writer.write(db.getEntries().asProtocolString())
                 writer.flush()
             }
             true
         } catch (e: IOException) {
+            Log.e("e", "e", e)
             false
         }
     }
+
+    private fun String.connect() = Socket().also { s -> s.connect(InetSocketAddress(this, 23754), 1000) }
 
     /**
      * Gets Entry objects from a local sync application conforming to protocol:
